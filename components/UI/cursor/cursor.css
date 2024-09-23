@@ -1,0 +1,28 @@
+/* CursorComponent.css */
+
+/* .cursor {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+} */
+
+.dot {
+  position: fixed;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 1);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  mix-blend-mode: difference;
+}
+
+/* #101010 dark gray  */
+/* #171717 lite gray */
+/* #A2A2A2 text gray */

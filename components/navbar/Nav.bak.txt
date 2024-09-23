@@ -1,0 +1,251 @@
+"use client";
+
+import { siteConfig } from "@/config/site";
+import {
+  Blocks,
+  Bot,
+  Boxes,
+  Brain,
+  Brush,
+  ChartArea,
+  ChartCandlestick,
+  ChevronDown,
+  ChevronRight,
+  Fingerprint,
+  FolderCode,
+  House,
+  LayoutPanelLeft,
+  Menu,
+  MonitorCog,
+  PanelsTopLeft,
+  ServerCog,
+  TabletSmartphone,
+  UserRound,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import React, { useState, useRef, useEffect } from "react";
+import ShimmerBtn from "../UI/button/ShimerBtn";
+import Shine from "../UI/Shine";
+import logo from "../../public/logos/AXO5.png";
+import Image from "next/image";
+import ConsultBtn from "./components/ConsultBtn";
+import MovileNav from "./components/MovileNav";
+
+const Navbar = () => {
+  const [activeSubMenu, setActiveSubMenu] = useState<number | null>(null);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const [showMobileNav, setShowMobileNav] = useState<boolean>(false);
+
+  const submenuRef = useRef<HTMLDivElement | null>(null);
+
+  const handleNavItemHover = (index: number | null) => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    setActiveSubMenu(index);
+  };
+
+  const handleMouseLeave = () => {
+    if (submenuRef.current) {
+      const timeout = setTimeout(() => {
+        setActiveSubMenu(null);
+      }, 200);
+
+      setTimeoutId(timeout);
+    }
+  };
+
+  useEffect(() => {
+    const handleMouseEnter = (event: MouseEvent) => {
+      if (
+        submenuRef.current &&
+        submenuRef.current.contains(event.target as Node)
+      ) {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+      }
+    };
+
+    window.addEventListener("mouseover", handleMouseEnter);
+
+    return () => {
+      window.removeEventListener("mouseover", handleMouseEnter);
+    };
+  }, [timeoutId]);
+
+  useEffect(() => {
+    if (showMobileNav) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [showMobileNav]);
+
+  return (
+    <div className="w-full z-[1000] relative">
+      <nav
+        className={`
+          w-full px-10  max-md:px-5 py-5 flex items-center justify-between z-[1000] relative
+          ${
+            showMobileNav &&
+            "bg-gray-lite bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10"
+          }
+          `}
+      >
+        <div className="">
+          <Image
+            src={logo}
+            height={300}
+            width={300}
+            alt="logo image"
+            className="w-[150px]"
+          />
+        </div>
+
+        {/* Large screen Menu items */}
+        <div
+          className={`
+            relative w-fit border-[1px] border-opacity-20 border-white rounded-lg 
+            px-7 py-3 flex items-center justify-center gap-10
+            max-[900px]:hidden
+          `}
+        >
+          {siteConfig.navItems.map((item, index) => (
+            <div
+              key={index}
+              onMouseEnter={() => handleNavItemHover(index)}
+              onMouseLeave={handleMouseLeave}
+              className="w-full"
+            >
+              <Link
+                href={item.href}
+                className="
+                w-fit relative text-white text-sm 
+                opacity-80 hover:opacity-100 
+                transition-all duration-300 
+                cursor-pointer 
+                flex items-center justify-start gap-2
+                
+                before:content-[''] before:absolute before:h-[1px] before:bg-white before:rounded-2xl before:w-full before:scale-x-0 before:hover:scale-x-100 before:transition before:duration-300 before:origin-left before:mt-6
+                "
+              >
+                {item.label}
+                {item?.subMenu && <ChevronDown className="size-5" />}
+              </Link>
+
+              {item?.subMenu && activeSubMenu == index && (
+                <div
+                  ref={submenuRef}
+                  className="
+                    absolute top-full translate-x-[-40%] w-fit
+                    mt-5 grid grid-cols-[repeat(4,250px)] gap-8 px-5 py-5
+                    max-xl:grid-cols-[repeat(2,250px)]
+
+                    
+                    rounded-xl border-[1px] border-gray-lite border-opacity-30
+                    
+                    bg-gray-lite bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-10"
+                >
+                  {item.subMenu.map((subItem, subIndex) => (
+                    <div
+                      key={subIndex}
+                      className="flex flex-col items-start justify-center gap-4 w-full text-sm cursor-pointer"
+                    >
+                      <div className="opacity-70">{subItem?.label}</div>
+
+                      {subItem?.links.map((link, index) => (
+                        <Link
+                          href={link?.href}
+                          key={index}
+                          className="flex items-center justify-start gap-2 group"
+                        >
+                          {/* Icon */}
+                          <span
+                            className="
+                            bg-primary bg-opacity-80
+                            px-2 py-2
+                            rounded-lg border-[1px] border-gray-lite border-opacity-20
+
+                            group-hover:bg-gray-100 transition-all duration-300
+                            "
+                          >
+                            {link.label.includes("Software") && (
+                              <FolderCode className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Web") && (
+                              <PanelsTopLeft className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("App Dev") && (
+                              <TabletSmartphone className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("AI Chat") && (
+                              <Bot className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("NLP") && (
+                              <Brain className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Analytics") && (
+                              <ChartArea className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Infra") && (
+                              <ServerCog className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("DevOps") && (
+                              <MonitorCog className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Application") && (
+                              <Boxes className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("UI") && (
+                              <Brush className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Security") && (
+                              <Fingerprint className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                            {link.label.includes("Marketing") && (
+                              <ChartCandlestick className="size-5 w-fit group-hover:text-gray-secondary transition-all duration-300" />
+                            )}
+                          </span>
+
+                          <span
+                            className="flex flex-col w-full opacity-80 
+                              group-hover:opacity-100 transition-all duration-300"
+                          >
+                            <span>{link?.label}</span>
+                            <span className="text-gray-lite">{link?.text}</span>
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="text-white flex items-center justify-center gap-3">
+          <div
+            onClick={() => setShowMobileNav(!showMobileNav)}
+            className="min-[900px]:hidden"
+          >
+            {!showMobileNav ? (
+              <Menu size={25} strokeWidth={1.5} />
+            ) : (
+              <X size={25} strokeWidth={1.5} />
+            )}
+          </div>
+
+          <ConsultBtn />
+        </div>
+      </nav>
+
+      {/* Mobile Navbar menu items */}
+      <MovileNav showMobileNav={showMobileNav} />
+    </div>
+  );
+};
+
+export default Navbar;

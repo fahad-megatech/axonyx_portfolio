@@ -1,0 +1,68 @@
+/* Initially hidden */
+.fade-div {
+  opacity: 0;
+  animation: showDiv 0s forwards;
+  animation-delay: 2s; /* Delay of 2 seconds */
+}
+
+/* Keyframes to make the div visible */
+@keyframes showDiv {
+  to {
+    opacity: 1;
+  }
+}
+
+.waving-hand {
+  display: inline-block;
+  font-size: 3rem; /* Adjust size as needed */
+  animation: wave 2s infinite;
+  transform-origin: bottom center; /* Set the origin to make the wave more natural */
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  30% {
+    transform: rotate(14deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.footer {
+  background-image: url("../../../../public/bg-images/round-waves.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 800px;
+}
+
+.consult {
+  background-image: url("../../../../public/bg-images/round-line-wave.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 800px;
+}
+
+.testimonials {
+  background-image: url("../../../../public/bg-images/horizontal-waves.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
